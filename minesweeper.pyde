@@ -10,6 +10,7 @@ NO_COLS = 9
 class Tile:
     def __init__(self):
         self.mine = False
+        self.mineCount = None
 
 # Create gird as game board
 gameBoard = [[Tile() for n in range(NO_COLS)] for n in range(NO_ROWS)]
@@ -37,6 +38,12 @@ def draw():
             else:
                 fill(255)
             rect(x, y, WIDTH, WIDTH)
+            
+            # Draw number of surrounding mines
+            fill(0, 0, 0)
+            if tile.mineCount != None:
+                text(tile.mineCount, x+WIDTH/2, y+WIDTH/2)
+            
             x += WIDTH
         y += WIDTH
         
@@ -46,10 +53,16 @@ def mousePressed():
     clickY = mouseY/WIDTH
     print clickX, clickY
     
+    # count number of mines surrounding the clicked tile
+    mineC = 0
     for (dx, dy) in [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]:
-        print gameBoard[clickY+dy][clickX+dx].mine, clickX+dx, clickY+dy
-    
-def inGrid(x, y):
+        if inBoard(clickX+dx, clickY+dy) and gameBoard[clickY+dy][clickX+dx].mine:
+            mineC += 1
+    if mineC > 0:
+        gameBoard[clickY][clickX].mineCount = mineC
+        print mineC
+            
+def inBoard(x, y):
     if x >= 0 and x < NO_COLS and y >= 0 and y < NO_ROWS:
         return True
     return False
