@@ -1,10 +1,11 @@
 from random import randint
 
-# Global constants
+# Globals
 WIDTH = 40
 NO_BOMBS = 10
 NO_ROWS = 9
 NO_COLS = 9
+GAMESTATE = "PLAYING" #PLAYING/WON/LOST
 
 # Singular tile
 class Tile:
@@ -12,6 +13,7 @@ class Tile:
         self.mine = False
         self.mineCount = None
         self.revealed = False
+        self.flagged = False
 
 # Create gird as game board
 gameBoard = [[Tile() for n in range(NO_COLS)] for n in range(NO_ROWS)]
@@ -31,34 +33,58 @@ def setup():
 
         
 def draw():
-    #draw tiles
-    y = 0
-    for row in gameBoard:
-        x = 0
-        for tile in row:
-            if tile.mine == True:
-                fill(255, 150, 50)
-            elif tile.revealed:
-                fill(255)
-            elif not tile.revealed:
-                fill(170)
-            rect(x, y, WIDTH, WIDTH)
-            
-            # Draw number of surrounding mines
-            fill(0, 0, 0)
-            if tile.mineCount != None:
-                text(tile.mineCount, x+WIDTH/2, y+WIDTH/2)
-            
-            x += WIDTH
-        y += WIDTH
+    if GAMESTATE == "PLAYING":     
+        #draw tiles
+        y = 0
+        for row in gameBoard:
+            x = 0
+            for tile in row:
+                if tile.mine == True:
+                    fill(255, 150, 50)
+                elif tile.revealed:
+                    fill(255)
+                elif not tile.revealed:
+                    fill(170)
+                rect(x, y, WIDTH, WIDTH)
+                
+                if tile.flagged:
+                    fill(0)
+                    text("x", x+WIDTH/2, y+WIDTH/2)
+                
+                # Draw number of surrounding mines
+                fill(0, 0, 0)
+                if tile.mineCount != None:
+                    text(tile.mineCount, x+WIDTH/2, y+WIDTH/2)
+                
+                x += WIDTH
+            y += WIDTH 
+        
+    if GAMESTATE == "WON":
+        text("YOU WIN", WIDTH/2, WIDTH/2)
 
                 
 def mousePressed():
+    global GAMESTATE
     # Get click x and y coordinates
     clickX = mouseX/WIDTH
     clickY = mouseY/WIDTH
-    search(clickX, clickY)
-    findNoOfMines(clickX, clickY)
+    if mouseButton == LEFT:
+        search(clickX, clickY)
+    elif mouseButton == RIGHT:
+        # Add flag to tile
+        print "flagged"
+        tile = gameBoard[clickY][clickX]
+        tile.flagged = True
+        
+        # Check all mines have been flagged
+        gameWon = True
+        for row in gameBoard:
+            for t in row:
+                if t.mine and not t.flagged:
+                    gameWon = False
+                    break
+        if gameWon:
+            GAMESTATE = "WON"
 
 
 def search(x, y):
