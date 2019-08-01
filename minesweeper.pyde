@@ -51,7 +51,6 @@ def mousePressed():
     # Get click x and y coordinates
     clickX = mouseX/WIDTH
     clickY = mouseY/WIDTH
-    print clickX, clickY
     
     # count number of mines surrounding the clicked tile
     mineC = 0
@@ -60,7 +59,6 @@ def mousePressed():
             mineC += 1
     if mineC > 0:
         gameBoard[clickY][clickX].mineCount = mineC
-        print mineC
             
 def inBoard(x, y):
     if x >= 0 and x < NO_COLS and y >= 0 and y < NO_ROWS:
