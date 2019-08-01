@@ -6,6 +6,7 @@ NO_BOMBS = 10
 NO_ROWS = 9
 NO_COLS = 9
 GAMESTATE = "PLAYING" #PLAYING/WON/LOST
+DEBUG = "OFF"
 
 # Singular tile
 class Tile:
@@ -39,7 +40,7 @@ def draw():
         for row in gameBoard:
             x = 0
             for tile in row:
-                if tile.mine == True:
+                if tile.mine == True and DEBUG == "ON":
                     fill(255, 150, 50)
                 elif tile.revealed:
                     fill(255)
@@ -60,7 +61,10 @@ def draw():
             y += WIDTH 
         
     if GAMESTATE == "WON":
-        text("YOU WIN", WIDTH/2, WIDTH/2)
+        text("YOU WIN!", 155, 395)
+    
+    if GAMESTATE == "LOST":
+        text("YOU LOSE...", 150, 395)
 
                 
 def mousePressed():
@@ -68,11 +72,12 @@ def mousePressed():
     # Get click x and y coordinates
     clickX = mouseX/WIDTH
     clickY = mouseY/WIDTH
-    if mouseButton == LEFT:
+    if mouseButton == LEFT and inBoard(clickX, clickY):
+        if gameBoard[clickY][clickX].mine:
+            GAMESTATE = "LOST"
         search(clickX, clickY)
-    elif mouseButton == RIGHT:
+    elif mouseButton == RIGHT and inBoard(clickX, clickY):
         # Add flag to tile
-        print "flagged"
         tile = gameBoard[clickY][clickX]
         tile.flagged = True
         
@@ -83,10 +88,19 @@ def mousePressed():
                 if t.mine and not t.flagged:
                     gameWon = False
                     break
-        if gameWon:
+        if gameWon and GAMESTATE == "PLAYING":
             GAMESTATE = "WON"
 
-
+def keyPressed():
+    global DEBUG
+    if key == TAB:
+        if DEBUG == "OFF":
+            DEBUG = "ON"
+            print "Debug Mode ON"
+        elif DEBUG == "ON":
+            DEBUG = "OFF"
+            print "Debug Mode OFF"
+            
 def search(x, y):
     # If trying to search off board
     if not inBoard(x, y):
