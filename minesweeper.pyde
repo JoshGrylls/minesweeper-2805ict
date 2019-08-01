@@ -27,14 +27,11 @@ for n in range(NO_BOMBS):
         if gameBoard[y][x].mine == False:
             gameBoard[y][x].mine = True
             break
-
-                
 def setup():
     size(360, 420)
 
-        
 def draw():
-    if GAMESTATE == "PLAYING":     
+    if GAMESTATE == "PLAYING":    
         #draw tiles
         y = 0
         for row in gameBoard:
