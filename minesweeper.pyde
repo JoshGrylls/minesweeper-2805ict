@@ -7,6 +7,7 @@ NO_ROWS = 9
 NO_COLS = 9
 GAMESTATE = "PLAYING" #PLAYING/WON/LOST
 DEBUG = "OFF"
+timer = 0
 
 # Singular tile
 class Tile:
@@ -19,16 +20,32 @@ class Tile:
 # Create gird as game board
 gameBoard = [[Tile() for n in range(NO_COLS)] for n in range(NO_ROWS)]
 
-# Place bombs randomly around the screen
-for n in range(NO_BOMBS):
-    while True:
-        x = randint(0, NO_COLS-1)
-        y = randint(0, NO_ROWS-1)
-        if gameBoard[y][x].mine == False:
-            gameBoard[y][x].mine = True
-            break
+def restart():
+    global DEBUG
+    global GAMESTATE
+    
+    for i in range(NO_COLS):
+        for j in range(NO_ROWS):
+            gameBoard[i][j].mine = False
+            gameBoard[i][j].mineCount = None
+            gameBoard[i][j].revealed = False
+            gameBoard[i][j].flagged = False
+    
+    GAMESTATE = "PLAYING"
+    DEBUG = "OFF"
+            
+    # Place bombs randomly around the screen
+    for n in range(NO_BOMBS):
+        while True:
+            x = randint(0, NO_COLS-1)
+            y = randint(0, NO_ROWS-1)
+            if gameBoard[y][x].mine == False:
+                gameBoard[y][x].mine = True
+                break
+
 def setup():
     size(360, 420)
+    restart()
 
 def draw():
     global timer
@@ -73,10 +90,13 @@ def draw():
     
     if GAMESTATE == "LOST":
         textSize(15)
-        text("YOU LOSE...", 150, 395)
+        text("YOU LOSE..", 140, 395)
         textSize(50)
         text(timer/1000, 40, 410)
-
+    
+    textSize(15)
+    text("Press Enter", 255, 390)
+    text("To Restart", 255, 405)
                 
 def mousePressed():
     global GAMESTATE
@@ -111,6 +131,9 @@ def keyPressed():
         elif DEBUG == "ON":
             DEBUG = "OFF"
             print "Debug Mode OFF"
+    if key == ENTER:
+        print "restarting"
+        restart()
             
 def search(x, y):
     # If trying to search off board
