@@ -31,8 +31,16 @@ def setup():
     size(360, 420)
 
 def draw():
-    if GAMESTATE == "PLAYING":    
-        #draw tiles
+    global timer
+    background(120)
+    #draw tiles
+    if GAMESTATE == "PLAYING":
+        # start timer
+        timer = millis()
+        fill(timer % 255)
+        textSize(50)
+        text(timer/1000, 40, 410)
+        textSize(15)
         y = 0
         for row in gameBoard:
             x = 0
@@ -47,21 +55,27 @@ def draw():
                 
                 if tile.flagged:
                     fill(0)
-                    text("x", x+WIDTH/2, y+WIDTH/2)
+                    text("x", (x+WIDTH/2)-3, (y+WIDTH/2)+3)
                 
                 # Draw number of surrounding mines
                 fill(0, 0, 0)
                 if tile.mineCount != None:
-                    text(tile.mineCount, x+WIDTH/2, y+WIDTH/2)
+                    text(tile.mineCount, (x+WIDTH/2)-3, (y+WIDTH/2)+3)
                 
                 x += WIDTH
             y += WIDTH 
         
     if GAMESTATE == "WON":
+        textSize(15)
         text("YOU WIN!", 155, 395)
+        textSize(50)
+        text(timer/1000, 40, 410)
     
     if GAMESTATE == "LOST":
+        textSize(15)
         text("YOU LOSE...", 150, 395)
+        textSize(50)
+        text(timer/1000, 40, 410)
 
                 
 def mousePressed():
