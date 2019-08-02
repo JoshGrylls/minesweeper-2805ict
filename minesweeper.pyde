@@ -71,7 +71,7 @@ def draw():
                 
                 if tile.flagged:
                     fill(0)
-                    text("x", (x+WIDTH/2)-3, (y+WIDTH/2)+3)
+                    text("x", (x+WIDTH/2)-17, (y+WIDTH/2)-9)
                 
                 # Draw number of surrounding mines
                 fill(0, 0, 0)
