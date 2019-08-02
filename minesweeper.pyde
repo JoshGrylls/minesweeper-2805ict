@@ -7,7 +7,6 @@ NO_ROWS = 9
 NO_COLS = 9
 GAMESTATE = "PLAYING" #PLAYING/WON/LOST
 DEBUG = "OFF"
-timer = 0
 
 # Singular tile
 class Tile:
