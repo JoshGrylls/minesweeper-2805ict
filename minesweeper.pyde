@@ -2,9 +2,9 @@ from random import randint
 
 # Globals
 WIDTH = 40
-NO_BOMBS = 16
 NO_ROWS = 9
-NO_COLS = 15
+NO_COLS = 17
+NO_BOMBS = NO_COLS+1
 GAMESTATE = "PLAYING" #PLAYING/WON/LOST
 DEBUG = "OFF"
 
@@ -43,7 +43,7 @@ def restart():
                 break
 
 def setup():
-    size(600, 420)
+    size(NO_COLS*WIDTH, NO_ROWS*WIDTH+60)
     restart()
 
 def draw():
