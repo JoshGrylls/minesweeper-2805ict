@@ -2,9 +2,9 @@ from random import randint
 
 # Globals
 WIDTH = 40
-NO_BOMBS = 10
+NO_BOMBS = 16
 NO_ROWS = 9
-NO_COLS = 9
+NO_COLS = 15
 GAMESTATE = "PLAYING" #PLAYING/WON/LOST
 DEBUG = "OFF"
 
@@ -23,8 +23,8 @@ def restart():
     global DEBUG
     global GAMESTATE
     
-    for i in range(NO_COLS):
-        for j in range(NO_ROWS):
+    for i in range(NO_ROWS):
+        for j in range(NO_COLS):
             gameBoard[i][j].mine = False
             gameBoard[i][j].mineCount = None
             gameBoard[i][j].revealed = False
@@ -43,7 +43,7 @@ def restart():
                 break
 
 def setup():
-    size(360, 420)
+    size(600, 420)
     restart()
 
 def draw():
